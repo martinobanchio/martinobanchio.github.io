@@ -3,10 +3,23 @@ title: Martino Banchio
 tag_text: mbanchio
 description: Academic Webpage of Martino Banchio
 # baseurl: "/blog" # the subpath of your site, e.g. /blog
-# url: "https://example.com" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://martinobanchio.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 
 plugins:
   - jekyll-seo-tag
+  - jekyll-sitemap
+
+defaults:
+  -
+    scope:
+      path:            "assets/*.png"
+    values:
+      sitemap:         false
+  -
+    scope:
+      path:           "files/*.pdf"
+    values:
+      sitemap:         false
 
 # Build settings
 markdown: kramdown
