@@ -2,45 +2,43 @@
 layout: default
 ---
 
-![Banner](assets/biscuit.png)
+    
+
+<img style="float: right; width:250px;" src="/assets/headshot.jpg" alt="headshot">
+
+# Martino Banchio
 
 
-**[Biscuit](http://sblisesivdin.github.io/biscuit)** is a single-page responsive Jekyll theme. This is the most simple and still-good-looking Jekyll theme that you can find. 
+Hello! My name is Martino, and I am a Research Scientist at Google  \
+Research in Mountain View, California.
 
-## Usage
+My work lies at the intersection of microeconomic theory, market and mechanism design, and computer science. 
 
-You can use this theme with [Jekyll](http://jekyllrb.com/) or you can simply use it with [Github Pages](https://pages.github.com).
-For local usage just download [Jekyll](http://jekyllrb.com/), use installation guide for more. You can download latest Biscuit from [its Github repository](https://github.com/sblisesivdin/biscuit).
+You can contact me at:  mbanchio 'at' google.com
 
-If you prefer to use Github Pages, you do not need to download it, upload files to a new repository...etc., just [fork](https://docs.github.com/en/get-starter/quickstart/fork-a-repo) and use it.
+Here you can find my **[CV](https://martinobanchio.github.io/files/CV.pdf)**
 
-### Files
+<br/>
 
-* `_config.yml`            : Main configuration file.
-* `index.md`               : Website page (for now, this page).
-* `_includes/head.html`    : File to add custom code to `<head>` section.
-* `_includes/scripts.html` : File to add custom code before `</body>`. You can change footer at here.
-* `_sass` folder           : Related scss files can be found at this folder.
-* `css/main.csss`          : Main scss file.
-* `README.md`              : A simple readme file.
+## Working Papers
 
-## Example tag usage
+### [Artificial Intelligence and Statistical Collusion](https://martinobanchio.github.io/files/AISC.pdf) (with G. Mantegazza)
 
-## Header 1
-### Header 2
-#### Header 3
-**bold**
-*italic*
+- [Extended Abstract](https://www.google.com/url?q=https%3A%2F%2Fdl.acm.org%2Fdoi%2F10.1145%2F3580507.3597726&sa=D) in EC'23
 
-> blockquotes
+### [Artificial Intelligence and Auction Design](https://arxiv.org/pdf/2202.05947.pdf) (with A. Skrzypacz)
 
-~~~python
-import os,time
-print ("Biscuit")
-~~~
+- [Extended Abstract](https://www.google.com/url?q=https%3A%2F%2Fdl.acm.org%2Fdoi%2F10.1145%2F3490486.3538244&sa=D) in EC'22 - Winner of the Exemplary AI Track Paper Award
 
-## Licence and Author Information
+### [Dynamic Pricing with Limited Commitment](https://arxiv.org/pdf/2102.07742.pdf) (with F. Yang)
 
-Biscuit is derived from currently deprecated theme [Solo](http://github.com/chibicode/solo). The development of Biscuit is maintained by [Sefer Bora Lisesivdin](https://lrgresearch.org/bora).
 
-Biscuit and the previous code where Biscuit is derived are distributed with [MIT license](https://github.com/sblisesivdin/biscuit/blob/gh-pages/LICENSE).
+### [Tarteging in Tournaments with Dynamic Incentives](https://martinobanchio.github.io/files/TTDI.pdf) (with E. Munro)
+
+&nbsp; &nbsp; Winner of the Research Paper Competition at MIT Sloan Sports Analytics Conference 2020
+
+## Other Publications
+
+### [Market Design for AI Algorithms](https://www.sigecom.org/exchanges/volume_20/2/BANCHIO.pdf) (with A. Skrzypacz) 
+
+- ACM SIGecom Exchanges, Vol. 20 (2), pp. 62-68, 2022
