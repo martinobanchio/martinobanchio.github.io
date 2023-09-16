@@ -34,7 +34,7 @@ layout: default
 ### [Dynamic Pricing with Limited Commitment](https://arxiv.org/pdf/2102.07742.pdf) <span style="font-weight:normal">(with F. Yang)</span>
 
 
-### [Tarteging in Tournaments with Dynamic Incentives](https://martinobanchio.github.io/files/TTDI.pdf) <span style="font-weight:normal">(with E. Munro)</span>
+### [Targeting in Tournaments with Dynamic Incentives](https://martinobanchio.github.io/files/TTDI.pdf) <span style="font-weight:normal">(with E. Munro)</span>
 
 - Winner of the Research Paper Competition at MIT Sloan Sports Analytics Conference 2020
 
