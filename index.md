@@ -4,19 +4,20 @@ layout: default
 
     
 
-<img style="float: right; width:250px;" src="/assets/headshot.jpg" alt="headshot">
+<span class="float-center">Martino Banchio</span>
+<img style="width:250px;" src="/assets/headshot.jpg" alt="headshot" class="float-right">
 
-# Martino Banchio
+<br/>
+
+<span class="float-center-main">Hello! My name is Martino, and I am a Research Scientist at Google Research in Mountain View, California.</span>
 
 
-Hello! My name is Martino, and I am a Research Scientist at Google  \
-Research in Mountain View, California.
+<span class="float-center-main">My work lies at the intersection of microeconomic theory, market and mechanism design, and computer science. </span>
 
-My work lies at the intersection of microeconomic theory, market and mechanism design, and computer science. 
+<span class="float-center-main">You can contact me at:  mbanchio 'at' google.com</span>
 
-You can contact me at:  mbanchio 'at' google.com
+<span class="float-center-main">Here you can find my **[CV](https://martinobanchio.github.io/files/CV.pdf)**</span>
 
-Here you can find my **[CV](https://martinobanchio.github.io/files/CV.pdf)**
 
 <br/>
 
@@ -35,7 +36,7 @@ Here you can find my **[CV](https://martinobanchio.github.io/files/CV.pdf)**
 
 ### [Tarteging in Tournaments with Dynamic Incentives](https://martinobanchio.github.io/files/TTDI.pdf) <span style="font-weight:normal">(with E. Munro)</span>
 
-&nbsp; &nbsp; Winner of the Research Paper Competition at MIT Sloan Sports Analytics Conference 2020
+- Winner of the Research Paper Competition at MIT Sloan Sports Analytics Conference 2020
 
 ## Other Publications
 

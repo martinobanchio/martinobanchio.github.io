@@ -22,7 +22,7 @@ body {
 }
 
 a {
-  color: #0074d9; /* From http://clrs.cc */
+  color: #0650B7; /* From http://clrs.cc */
   text-decoration: none;
 }
 
@@ -135,7 +135,15 @@ hr {
 
 .container img {
   margin: 0 auto;
+  margin-left: 30px;
   display: block;
+}
+
+@media (max-width: 720px) {
+  .container img{
+    margin: 0 auto;
+    display: block;
+  }
 }
 
 table {
@@ -167,9 +175,51 @@ pre > code {
   padding: 0;
 }
 
+.float-right {
+  float: right;
+  vertical-align: bottom;
+}
+
+@media (max-width: 720px) {
+  .float-right {
+    float: none;
+    display: block;
+    margin-bottom: 10px;
+  }
+}
+
+.float-center {
+  text-align: left;
+  font-size: 2.2rem;
+  color: #0650B7;
+  font-weight: bold;
+}
+
+@media (max-width: 720px) {
+  .float-center {
+    text-align: center;
+    font-size:2.2rem;
+    font-weight: bold;
+    display: block;
+    color: #0650B7;
+  }
+}
+
+.float-center-main {
+  text-align: left;
+}
+
+@media (max-width: 720px) {
+  .float-center-main {
+    text-align: center;
+    display: block;
+  }
+}
+
 .container {
   max-width: 50rem;
   margin: 0 auto;
   padding: 0 1rem;
 }
+
 
