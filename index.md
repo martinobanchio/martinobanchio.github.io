@@ -23,7 +23,7 @@ layout: default
 
 ## Working Papers
 
-### [Artificial Intelligence and Statistical Collusion](https://martinobanchio.github.io/files/AISC.pdf) <span style="font-weight:normal">(with G. Mantegazza)</span>
+### [Artificial Intelligence and Spontaneous Collusion](https://martinobanchio.github.io/files/AISC.pdf) <span style="font-weight:normal">(with G. Mantegazza)</span>
 
 - [Extended Abstract](https://www.google.com/url?q=https%3A%2F%2Fdl.acm.org%2Fdoi%2F10.1145%2F3580507.3597726&sa=D) in EC'23
 
