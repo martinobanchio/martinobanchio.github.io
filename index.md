@@ -2,7 +2,7 @@
 layout: default
 ---
 
-    
+   
 
 <span class="float-center">Martino Banchio</span>
 <img style="width:250px;" src="/assets/headshot.jpg" alt="headshot" class="float-right">
@@ -14,7 +14,7 @@ layout: default
 
 <span class="float-center-main">My work lies at the intersection of microeconomic theory, market and mechanism design, and computer science. </span>
 
-<span class="float-center-main">You can contact me at:  mbanchio 'at' google.com</span>
+<span class="float-center-main">You can contact me at:  martino 'dot' banchio 'at' gmail.com</span>
 
 <span class="float-center-main">Here you can find my **[CV](https://martinobanchio.github.io/files/CV.pdf)**</span>
 
@@ -23,7 +23,11 @@ layout: default
 
 ## Working Papers
 
-### [Artificial Intelligence and Spontaneous Collusion](https://martinobanchio.github.io/files/AISC.pdf) <span style="font-weight:normal">(with G. Mantegazza)</span>
+### <span style="color:red">New!</span> Search and Rediscovery <span style="font-weight:normal">(with S. Malladi)</span>
+
+### <span style="color:red">New!</span> [Auctions with Dynamic Scoring](https://arxiv.org/pdf/2403.11022.pdf)   <span style="font-weight:normal">(with A. Mehta and A. Perlroth)</span>
+
+### [Artificial Intelligence and Statistical Collusion](https://martinobanchio.github.io/files/AISC.pdf) <span style="font-weight:normal">(with G. Mantegazza)</span>
 
 - [Extended Abstract](https://www.google.com/url?q=https%3A%2F%2Fdl.acm.org%2Fdoi%2F10.1145%2F3580507.3597726&sa=D) in EC'23
 
