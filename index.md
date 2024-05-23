@@ -27,7 +27,7 @@ layout: default
 
 ### [Auctions with Dynamic Scoring](https://arxiv.org/pdf/2403.11022.pdf)   <span style="font-weight:normal">(with A. Mehta and A. Perlroth)</span>
 
-### [Artificial Intelligence and Statistical Collusion](https://martinobanchio.github.io/files/AISC.pdf) <span style="font-weight:normal">(with G. Mantegazza)</span>
+### [Artificial Intelligence and Spontaneous Collusion](https://martinobanchio.github.io/files/AISC.pdf) <span style="font-weight:normal">(with G. Mantegazza)</span>
 R&R, <span style="font-style:italic">American Economic Review</span> 
 
 ### [Artificial Intelligence and Auction Design](https://arxiv.org/pdf/2202.05947.pdf) <span style="font-weight:normal">(with A. Skrzypacz)</span>
