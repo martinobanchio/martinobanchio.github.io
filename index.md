@@ -9,12 +9,11 @@ layout: default
 
 <br/>
 
-<span class="float-center-main">Hello! My name is Martino, and I am a Research Scientist at Google Research in Mountain View, California.</span>
-
+<span class="float-center-main">Hello! I am an Assistant Professor at the Department of Economics of Bocconi University. I am also a part-time Research Scientist at Google Research.</span>
 
 <span class="float-center-main">My work lies at the intersection of microeconomic theory, market and mechanism design, and computer science. My PhD thesis was recognized with an honorable mention at the 2023 ACM SIGecom Doctoral Dissertation Award.</span>
 
-<span class="float-center-main">You can contact me at:  martino 'dot' banchio 'at' gmail.com</span>
+<span class="float-center-main">You can contact me at:  martino 'dot' banchio 'at' unibocconi.it</span>
 
 <span class="float-center-main">Here you can find my **[CV](https://martinobanchio.github.io/files/CV.pdf)**</span>
 
