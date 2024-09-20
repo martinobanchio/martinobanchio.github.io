@@ -9,7 +9,7 @@ layout: default
 
 <br/>
 
-<span class="float-center-main">Hello! I am an Assistant Professor at the Department of Economics of Bocconi University. I am also a part-time Research Scientist at Google Research.</span>
+<span class="float-center-main">Hello! I am an Assistant Professor at the Department of Economics of Bocconi University, an Affiliate of IGIER (Innocenzo Gasparini Institute for Economic Research), and a part-time Research Scientist at Google Research.</span>
 
 <span class="float-center-main">My work lies at the intersection of microeconomic theory, market and mechanism design, and computer science. My PhD thesis was recognized with an honorable mention at the 2023 ACM SIGecom Doctoral Dissertation Award.</span>
 
