@@ -7,7 +7,13 @@ layout: default
 <span class="float-center">Martino Banchio</span>
 <img style="width:280px;" src="/assets/headshot.webp" alt="headshot" class="float-right">
 
+<<<<<<< HEAD
 <span class="float-center-main">Hello! I am an Assistant Professor at the Department of Economics of Bocconi University. I am also a part-time Research Scientist in Google Research's Market Algorithms group.</span>
+=======
+<br/>
+
+<span class="float-center-main">Hello! I am an Assistant Professor at the Department of Economics of Bocconi University, an Affiliate of IGIER (Innocenzo Gasparini Institute for Economic Research), and a part-time Research Scientist at Google Research.</span>
+>>>>>>> 3e377b0eaba8d8de29989e10066ac9df020d92a4
 
 <span class="float-center-main">My work lies at the intersection of microeconomic theory, market and mechanism design, and computer science. My PhD thesis was recognized with an honorable mention at the 2023 ACM SIGecom Doctoral Dissertation Award.</span>
 
