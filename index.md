@@ -5,11 +5,9 @@ layout: default
    
 
 <span class="float-center">Martino Banchio</span>
-<img style="width:250px;" src="/assets/headshot.jpg" alt="headshot" class="float-right">
+<img style="width:280px;" src="/assets/headshot.webp" alt="headshot" class="float-right">
 
-<br/>
-
-<span class="float-center-main">Hello! I am an Assistant Professor at the Department of Economics of Bocconi University. I am also a part-time Research Scientist at Google Research.</span>
+<span class="float-center-main">Hello! I am an Assistant Professor at the Department of Economics of Bocconi University. I am also a part-time Research Scientist in Google Research's Market Algorithms group.</span>
 
 <span class="float-center-main">My work lies at the intersection of microeconomic theory, market and mechanism design, and computer science. My PhD thesis was recognized with an honorable mention at the 2023 ACM SIGecom Doctoral Dissertation Award.</span>
 
@@ -24,7 +22,7 @@ layout: default
 
 ### Search and Rediscovery <span style="font-weight:normal">(with S. Malladi) - <span style="font-weight:bold">Draft coming soon</span></span>
 
-### [Auctions with Dynamic Scoring](https://arxiv.org/pdf/2403.11022.pdf)   <span style="font-weight:normal">(with A. Mehta and A. Perlroth)</span>
+### [Auctions with Dynamic Scoring](https://arxiv.org/pdf/2403.11022)   <span style="font-weight:normal">(with A. Mehta and A. Perlroth)</span>
 
 ### [Artificial Intelligence and Spontaneous Collusion](https://martinobanchio.github.io/files/AISC.pdf) <span style="font-weight:normal">(with G. Mantegazza)</span>
 R&R, <span style="font-style:italic">American Economic Review</span> 
