@@ -6,3 +6,4 @@ Gemfile
 Gemfile.lock
 vendor
 files/.DS_Store
+.gitignore
