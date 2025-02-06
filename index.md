@@ -21,9 +21,9 @@ layout: default
 
 ## Working Papers
 
-### [Search and Rediscovery](/files/SR.pdf) <span style="font-weight:normal">(with S. Malladi) 
+### [Rediscovery](/files/SR.pdf) <span style="font-weight:normal">(with S. Malladi) 
 
-### [Auctions with Dynamic Scoring](https://arxiv.org/pdf/2403.11022)   <span style="font-weight:normal">(with A. Mehta and A. Perlroth)</span>
+### [Ads in Conversations](https://arxiv.org/pdf/2403.11022)   <span style="font-weight:normal">(with A. Mehta and A. Perlroth)</span>
 
 ### [Artificial Intelligence and Spontaneous Collusion](/files/AISC.pdf) <span style="font-weight:normal">(with G. Mantegazza)</span>
 R&R, <span style="font-style:italic">American Economic Review</span> 
@@ -38,7 +38,7 @@ R&R, <span style="font-style:italic">American Economic Review</span>
 
 ## Peer-Reviewed Conference Proceedings
 
-### Autobidding with Interdependent Values <span style="font-weight:normal">(with K. Bhawalkar, C. Liaw, A. Mehta, and A. Perlroth)</span>
+### [Autobidding with Interdependent Values](https://openreview.net/pdf?id=ZKKGHo808F) <span style="font-weight:normal">(with K. Bhawalkar, C. Liaw, A. Mehta, and A. Perlroth)</span>
 Forthcoming, Proceedings of the ACM Web Conference 2025 (WWW'25)
 
 ### [Search and Rediscovery](https://dl.acm.org/doi/10.1145/3670865.3673452) <span style="font-weight:normal">(with S. Malladi)</span>
