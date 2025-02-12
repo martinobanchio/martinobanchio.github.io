@@ -8,9 +8,9 @@ layout: default
 <img style="width:280px;" src="/assets/headshot.webp" alt="headshot" class="float-right">
 
 
-<span class="float-center-main">Hello! I am an Assistant Professor at the Department of Economics of Bocconi University, an Affiliate of IGIER (Innocenzo Gasparini Institute for Economic Research), and a part-time Research Scientist at Google Research.</span>
+<span class="float-center-main">I am an Assistant Professor at the Department of Economics of Bocconi University, an Affiliate of IGIER (Innocenzo Gasparini Institute for Economic Research), and a part-time Research Scientist at Google Research.</span>
 
-<span class="float-center-main">My work lies at the intersection of microeconomic theory, market and mechanism design, and computer science. My PhD thesis was recognized with an honorable mention at the 2023 ACM SIGecom Doctoral Dissertation Award.</span>
+<span class="float-center-main">I work on market design, microeconomic theory, and computer science. My PhD thesis was recognized with an honorable mention at the 2023 ACM SIGecom Doctoral Dissertation Award.</span>
 
 <span class="float-center-main">You can contact me at:  martino 'dot' banchio 'at' unibocconi.it</span>
 
@@ -20,6 +20,8 @@ layout: default
 <br/>
 
 ## Working Papers
+
+### [Dynamic Threats to Credible Auctions](/files/DTCA.pdf) <span style="font-weight:normal">(with A. Skrzypacz and F. Yang) 
 
 ### [Rediscovery](/files/SR.pdf) <span style="font-weight:normal">(with S. Malladi) 
 
@@ -39,16 +41,16 @@ R&R, <span style="font-style:italic">American Economic Review</span>
 ## Peer-Reviewed Conference Proceedings
 
 ### [Autobidding with Interdependent Values](https://openreview.net/pdf?id=ZKKGHo808F) <span style="font-weight:normal">(with K. Bhawalkar, C. Liaw, A. Mehta, and A. Perlroth)</span>
-Forthcoming, Proceedings of the ACM Web Conference 2025 (WWW'25)
+Forthcoming, Proceedings of the ACM Web Conference 2025 **(WWW'25)**
 
 ### [Search and Rediscovery](https://dl.acm.org/doi/10.1145/3670865.3673452) <span style="font-weight:normal">(with S. Malladi)</span>
-Proceedings of the 25th ACM Conference on Economics and Computation (EC'24) - extended abstract
+Proceedings of the 25th ACM Conference on Economics and Computation **(EC'24)** - extended abstract
 
 ### [Artificial Intelligence and Collusion via Coupling](https://dl.acm.org/doi/10.1145/3580507.3597726) <span style="font-weight:normal">(with G. Mantegazza)</span>
-Proceedings of the 24th ACM Conference on Economics and Computation (EC'23) - extended abstract
+Proceedings of the 24th ACM Conference on Economics and Computation **(EC'23)** - extended abstract
 
 ### [Artificial Intelligence and Auction Design](https://dl.acm.org/doi/10.1145/3490486.3538244) <span style="font-weight:normal">(with A. Skrzypacz)</span>
-Proceedings of the 23rd ACM Conference on Economics and Computation (EC'22) - extended abstract
+Proceedings of the 23rd ACM Conference on Economics and Computation **(EC'22)** - extended abstract
 - Winner of the Exemplary AI Track Paper Award
 
 
