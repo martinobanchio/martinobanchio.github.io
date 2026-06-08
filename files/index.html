@@ -1,0 +1,2044 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calibrated Learning in Bayesian Games</title>
+
+  <!-- Reveal.js core -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+  <!-- We use the "white" theme as a base, then override everything -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css">
+
+  <!-- MathJax 3 for LaTeX rendering -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        macros: {
+          R: '\\mathbb{R}',
+          E: '\\mathbb{E}',
+          P: '\\mathbb{P}',
+          N: '\\mathbb{N}',
+          ra: '\\rightarrow',
+          Ra: '\\Rightarrow',
+          D: '\\Delta',
+          T: ['\\text{#1}', 1],
+          argmax: '\\operatorname*{arg\\,max}'
+        }
+      },
+      svg: { fontCache: 'global' },
+      startup: {
+        ready: () => {
+          MathJax.startup.defaultReady();
+        }
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+
+  <!-- Google Fonts: Calibri-like fallback -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Carlito:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* =========================================================
+       CUSTOM THEME — matches the user's white + dark-red style
+       ========================================================= */
+
+    :root {
+      --red: #C00000;
+      --red-light: #e8cccc;
+      --dark: #222222;
+      --gray: #888888;
+      --gray-light: #bbbbbb;
+      --blue: #3333b3;
+      --blue-light: #d0d0f0;
+      --bg: #ffffff;
+    }
+
+    .reveal {
+      font-family: 'Carlito', 'Calibri', 'Segoe UI', sans-serif;
+      font-size: 28px;
+      color: var(--dark);
+    }
+
+    /* ---------- Headings ---------- */
+    .reveal h1,
+    .reveal h2,
+    .reveal h3 {
+      font-family: 'Carlito', 'Calibri Light', 'Calibri', sans-serif;
+      color: var(--red);
+      font-weight: 400;
+      text-transform: none;
+      letter-spacing: 0;
+      text-align: left;
+      margin-bottom: 0.6em;
+    }
+
+    .reveal h1 {
+      font-size: 2.2em;
+    }
+
+    .reveal h2 {
+      font-size: 1.65em;
+    }
+
+    .reveal h3 {
+      font-size: 1.2em;
+      color: var(--dark);
+      font-weight: 700;
+    }
+
+    /* ---------- Slide layout ---------- */
+    .reveal .slides {
+      text-align: left;
+    }
+
+    .reveal .slides section {
+      padding: 40px 60px 60px 60px;
+      box-sizing: border-box;
+      /* Make content slides use flex column layout */
+      display: flex !important;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    /* The slide body (everything after h2) centers vertically */
+    .reveal .slides section>.slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* ---------- Lists ---------- */
+    .reveal ul,
+    .reveal ol {
+      margin-left: 0.4em;
+    }
+
+    .reveal li {
+      margin-bottom: 0.45em;
+      line-height: 1.55;
+    }
+
+    .reveal ul li::marker {
+      color: var(--gray-light);
+    }
+
+    /* ---------- Colored text helpers ---------- */
+    .red {
+      color: var(--red);
+    }
+
+    .blue {
+      color: var(--blue);
+    }
+
+    .gray {
+      color: var(--gray);
+    }
+
+    .black {
+      color: black;
+    }
+
+    .bold {
+      font-weight: 700;
+    }
+
+    .normalfont {
+      font-weight: 400;
+    }
+
+    /* ---------- Title slide ---------- */
+    .title-slide {
+      text-align: center !important;
+      display: flex !important;
+      flex-direction: column;
+      justify-content: center !important;
+      align-items: center;
+    }
+
+    .title-slide h1 {
+      text-align: center;
+      margin-bottom: 0.15em;
+      line-height: 1.2;
+    }
+
+    .title-slide .title-rule {
+      width: 80%;
+      height: 2px;
+      background: var(--red);
+      margin: 0.5em auto 0.8em;
+    }
+
+    .title-slide .authors {
+      font-size: 0.82em;
+      line-height: 1.7;
+      color: var(--dark);
+    }
+
+    .title-slide .authors strong {
+      font-size: 1.05em;
+    }
+
+    .title-slide .date {
+      margin-top: 1.4em;
+      font-size: 0.78em;
+      color: var(--gray);
+    }
+
+    /* ---------- Section divider slides ---------- */
+    .reveal .slides section.section-slide {
+      padding-top: 420px !important;
+    }
+
+    .reveal .slides section.section-slide h2 {
+      text-align: left !important;
+      font-size: 2.4em;
+      margin: 0;
+      border-bottom: 3px solid var(--red);
+      padding-bottom: 0.2em;
+    }
+
+    /* ---------- Highlight box ---------- */
+    .highlight-box {
+      background: var(--blue-light);
+      border-radius: 6px;
+      padding: 0.6em 1em;
+      margin: 0.7em 0;
+      font-size: 0.95em;
+    }
+
+    .highlight-box.red-box {
+      background: var(--red-light);
+    }
+
+    .highlight-box.white-box {
+      background: white;
+    }
+
+    /* ---------- Theorem / Definition block ---------- */
+    .theorem-block {
+      border-left: 4px solid var(--red);
+      padding: 0.5em 0.9em;
+      margin: 0.6em 0;
+      background: #fdf0f0;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .theorem-block.definition-block {
+      border-left-color: var(--red);
+      background: #fdf0f0;
+    }
+
+    .theorem-block .theorem-title {
+      font-weight: 700;
+      color: var(--red);
+      margin-bottom: 0.3em;
+    }
+
+    .theorem-block.definition-block .theorem-title {
+      color: var(--red);
+    }
+
+    /* ---------- Two-column layout ---------- */
+    .columns {
+      display: flex;
+      gap: 2em;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .columns .col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    /* ---------- Table styling ---------- */
+    .reveal table {
+      border-collapse: collapse;
+      font-size: 0.85em;
+      margin: 0.6em 0;
+    }
+
+    .reveal table th,
+    .reveal table td {
+      padding: 0.35em 0.7em;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+
+    .reveal table th {
+      background: #f5f5f5;
+      font-weight: 700;
+    }
+
+    /* ---------- Payoff matrix ---------- */
+    .payoff-matrix {
+      border-collapse: collapse;
+      margin: 0.3em 0;
+      font-size: 0.82em;
+    }
+
+    .payoff-matrix td,
+    .payoff-matrix th {
+      padding: 0.3em 0.6em;
+      border: 1px solid #aaa;
+      text-align: center;
+      min-width: 3em;
+    }
+
+    .payoff-matrix th {
+      background: transparent;
+      font-weight: 700;
+    }
+
+    .payoff-matrix .empty {
+      border: none;
+    }
+
+    /* ---------- Footnote / citation ---------- */
+    .footnote {
+      font-size: 0.65em;
+      color: var(--gray);
+      margin-top: 1.2em;
+    }
+
+    /* ---------- Slide number ---------- */
+    .reveal .slide-number {
+      display: none !important;
+    }
+
+    /* ---------- Fragment animation ---------- */
+    .reveal .fragment.fade-in-then-semi-out.visible:not(.current-fragment) {
+      opacity: 0.45;
+    }
+
+    /* ---------- Hierarchy diagram ---------- */
+    .hierarchy-diagram {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0.8em auto;
+      position: relative;
+    }
+
+    .hierarchy-box {
+      border: 2px solid;
+      border-radius: 10px;
+      padding: 1.2em 1.8em;
+      text-align: center;
+      font-weight: 700;
+      font-size: 1.1em;
+      position: absolute;
+    }
+
+    /* ---------- SVG diagrams ---------- */
+    .diagram-svg {
+      display: block;
+      margin: 0.5em auto;
+    }
+
+    /* ---------- Small text ---------- */
+    .medium {
+      font-size: 0.88em;
+    }
+
+    .small {
+      font-size: 0.82em;
+    }
+
+    .smaller {
+      font-size: 0.72em;
+    }
+
+    .tiny {
+      font-size: 0.62em;
+    }
+
+    /* ---------- Spacing helpers ---------- */
+    .mt-1 {
+      margin-top: 0.5em;
+    }
+
+    .mt-2 {
+      margin-top: 1.0em;
+    }
+
+    .mt-3 {
+      margin-top: 1.5em;
+    }
+
+    .mb-1 {
+      margin-bottom: 0.5em;
+    }
+
+    .center-text {
+      text-align: center;
+    }
+
+    /* ---------- Progress bar ---------- */
+    .reveal .progress {
+      color: var(--red);
+      height: 3px;
+    }
+
+    /* ---------- Override link color ---------- */
+    .reveal a {
+      color: var(--blue);
+    }
+
+    @media print {
+      .reveal .slides section {
+        box-sizing: border-box;
+        overflow: hidden;
+      }
+
+      .reveal .slides section img {
+        max-width: 100%;
+        max-height: 80%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+
+      <!-- ============================================================
+     TITLE SLIDE
+     ============================================================ -->
+      <section class="title-slide" data-background-color="#ffffff">
+        <h1>Calibrated Learning in Bayesian Games<br><span style="font-size:0.65em; font-weight: 300;">and the Limits of
+            Algorithmic Collusion</span></h1>
+        <div class="title-rule"></div>
+        <div class="authors">
+          <strong>Martino Banchio</strong><br>
+          Bocconi, IGIER &amp; Google Research<br><br>
+          Joint with <strong>Lea Nagel</strong> (Harvard) and <strong>Roberto Saitto</strong> (Kellogg MEDS)
+        </div>
+        <div class="date">June 2026</div>
+      </section>
+
+
+      <!-- ============================================================
+     PART I: MOTIVATION
+     ============================================================ -->
+
+      <!-- Motivation 1: Algorithms Are Setting Prices -->
+      <section>
+        <h2>Algorithms Are Setting Prices</h2>
+
+        <p>Pricing algorithms operate across retail, ad exchanges, ride-sharing, financial markets, rental
+          housing, etc.</p>
+
+        <p class="mt-2">Firms increasingly <span class="red">delegate pricing</span> to automated procedures that <span
+            class="red">learn from repeated interaction</span> with competitors doing the same</p>
+
+        <div class="mt-2">
+          <p>Growing literature on <span class="red">supracompetitive outcomes</span>:</p>
+          <ul>
+            <li>Calvano et al. (2020): Q-learning algorithms sustain collusion in lab</li>
+            <li>Assad et al. (2024): algorithmic pricing markups in gasoline markets</li>
+            <!-- <li>Calder-Wang &amp; Kim (2024): RealPage and multifamily rents</li> -->
+            <li>... and many others</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Motivation 2: The Policy Concern -->
+      <section>
+        <h2>What the law says</h2>
+
+        <p>The DOJ, FTC, and EU Commission are actively investigating algorithmic price-fixing</p>
+
+        <p class="mt-2">Regulators' challenge: the law is clear on what constitutes collusion</p>
+
+        <div class="highlight-box red-box mt-2">
+          <p>(Sherman Act §1) Every contract, combination in the form of trust or otherwise, or conspiracy,
+            in restraint of trade or commerce [...] is declared to be illegal.
+          </p>
+        </div>
+
+        <p class="mt-2"> → Requires evidence of <span class="red bold">communication or agreement</span>
+          - parallel pricing alone is not illegal </p>
+
+        <p class="mt-2"> → If algorithms learn to coordinate <em>without</em> communicating, can we even call it
+          collusion?
+        </p>
+
+        <!-- <p class="mt-2 gray small">Ezrachi &amp; Stucke (2016); Harrington (2018)</p> -->
+      </section>
+
+
+      <!-- Motivation 3: What if it's not about prices? -->
+      <section>
+        <h2>Beyond Price-Setting</h2>
+
+        <p>Much of the debate has focused on <span class="red bold">prices</span></p>
+
+        <p class="mt-2">But recent cases brought by the DOJ (AgriStats, RealPage) raise questions about <span
+            class="red bold">information</span>:</p>
+
+        <p>Example: <span class="red bold">RealPage</span></p>
+        <ul class="mt-1">
+          <li>Landlords adopt RealPage to set rental prices in their apartment buildings</li>
+          <li>DOJ claims granular data about rents and occupancy were pooled and used at runtime</li>
+          <li>Lawsuit settled with prohibitions on use of competitors' information at runtime</li>
+        </ul>
+
+      </section>
+
+      <!-- Motivation 3: What if it's not about prices? -->
+      <section>
+        <h2>Beyond Price-Setting</h2>
+
+        <!-- <p>Much of the debate has focused on <span class="red bold">prices</span></p>
+
+        <p class="mt-2">But recent cases brought by the DOJ (AgriStats, RealPage) raise questions about <span
+            class="red bold">information</span>:</p> -->
+
+        <p class="mt-2">Remedies forbid RealPage from acting as manager of information cartel</p>
+        <p> </p>
+        <p class="mt-2">But pricing algorithms may learn to share information <span class="red bold">implicitly</span>
+          through repeated
+          interaction</p>
+        <p> </p>
+        <p class="mt-2">Open question: how to detect and prevent such coordination? </p>
+      </section>
+
+      
+
+      <!-- Information 1: The Vives tradition
+      <section>
+        <h2>Information Sharing in Oligopoly</h2>
+
+        <p>Classic question going back to the 1980s:</p>
+
+        <div class="mt-1">
+          <p class="bold">When should firms share private information?</p>
+          <ul>
+            <li>Vives (1984): information sharing in Cournot oligopoly — welfare effects depend on the nature of
+              uncertainty</li>
+            <li>Gal-Or (1985, 1986): strategic information transmission</li>
+            <li>Li (1985): Cournot oligopoly with information exchange</li>
+          </ul>
+        </div>
+
+        <p class="mt-2">Key insight from this literature: <span class="blue">information sharing can be both pro- and
+            anti-competitive</span></p>
+
+        <p class="mt-1">The welfare effects hinge on <em>what kind</em> of information is exchanged and <em>how</em></p>
+      </section> -->
+
+
+      <!-- Information 2: From communication to algorithms -->
+<!-- 
+      <section>
+        <h2>Communication in Oligopoly</h2>
+
+        <div class="columns">
+          <div class="col">
+            <h3>Traditional setting</h3>
+            <ul>
+              <li>Firms have private signals</li>
+              <li>They may share information through e.g. trade associations</li>
+              <li>Regulators can monitor and prohibit explicit channels</li>
+            </ul>
+          </div>
+          <div class="col">
+
+          </div>
+        </div>
+
+        <div class="highlight-box white-box mt-2">
+          <span style="color:white">Algorithms may learn to correlate behavior through shared histories, even
+            without sharing private information — a grey area for regulation</span>
+        </div>
+      </section>
+
+      <section>
+        <h2>Algorithmic Communication</h2>
+
+        <div class="columns">
+          <div class="col">
+            <h3>Traditional setting</h3>
+            <ul>
+              <li>Firms have private signals</li>
+              <li>They may share information through e.g. trade associations</li>
+              <li>Regulators can monitor and prohibit explicit channels</li>
+            </ul>
+          </div>
+          <div class="col">
+            <h3>Algorithmic setting</h3>
+            <ul>
+              <li>Algorithms choose prices</li>
+              <li>Build <span class="red bold">shared histories</span> from public data</li>
+              <li>Rich implicit conditioning on information information</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="highlight-box red-box mt-2">
+          Algorithms may learn to <span class="red bold">correlate behavior</span> through shared histories, even
+          without sharing private information: grey area
+        </div>
+      </section> -->
+
+
+      <!-- This Paper -->
+
+      <section>
+        <h2>This Paper</h2>
+
+        <div>
+          <p><span class="red bold">1.</span>&ensp; Characterize the learning outcomes of a broad class of algorithms in
+            Bayesian Games <br>
+            <span style="font-size:0.82em; color:grey"> &rarr; <span class="red bold">stationary</span>, <span
+                class="red bold">calibrated</span>, and <span class="red bold">rational</span> learning in Bayesian
+              games converge to <span class="red bold">Privately Correlated Equilibria (PCE)</span></span>
+          </p>
+        </div>
+
+        <div class="mt-2">
+          <p><span class="red bold">2.</span>&ensp; Epistemic classification of such equilibria <br>
+            <span style="font-size:0.82em; color:grey"> &rarr; PCE $\Leftrightarrow$
+              BNE of game with <span class="red bold">belief-invariant</span> recommendation scheme </span> <br>
+            <span style="font-size:0.82em; color:grey"> &rarr; BNE $\subseteq$ PCE $\subseteq$ BCE:
+              gap BCE $\setminus$ PCE measures value of <span class="red bold">centralized</span> information
+              sharing</span></span>
+          </p>
+        </div>
+
+        <div class="mt-2">
+          <p><span class="red bold">3.</span>&ensp; Applications <br>
+            <span style="font-size:0.82em; color:grey">
+              &rarr; Games whithout information sharing in the private equilibrium - implications for design <br>
+              &rarr; Example where autonomous information sharing
+              <span class="red bold">increases</span> industry surplus<br>
+              </span>
+          </p>
+        </div>
+
+      </section>
+
+      <section>
+        <h2>Literature</h2>
+        <ul>
+          <li><strong>Algo Collusion:</strong> Calvano et al (2020), 
+            Asker, Fershtman, Pakes (2024), Hansen, Misra, and Pai (2021)
+            Brown and MacKay (2023, 2026), Lamba and Zhuk (2024), 
+            Banchio and Mantegazza (2023), Lomys and Magnolfi (2026), Harrington and Ortner (2026) ...<br> 
+            <span class="small gray"> Today &rarr; Incomplete information and autonomous coordination</span></li>
+
+          <li><strong>Info Sharing in Oligopoly:</strong> Vives (1984, 1999), Gal Or (1985, 1986), Li (1985), 
+            Angeletos and Pavan (2007), Bergemann and Morris (2013) ...
+            <br> <span class="small gray"> Today &rarr; Info sharing without explicit communication</span></li>
+          
+          <li><strong>Information Design:</strong>  
+            Bergemann and Morris (2015, 2016), Bergemann, Brooks and Morris (2017, 2020), Mathevet, Perego, Taneva (2020),
+            Brooks and Du (2024), Brooks, Du, Haberman (2025) ... <br>
+          <span class="small gray"> Today &rarr; Apply tools to a different equilibrium concept</span></li>
+        </ul>
+      </section>
+
+      <!-- ============================================================
+     SECTION DIVIDER: MODEL
+     ============================================================ -->
+      <section class="section-slide">
+        <h2>Model</h2>
+      </section>
+
+
+
+      <!-- Model: The Bayesian Game -->
+      <section>
+        <h2>The Bayesian Game</h2>
+
+        <p>A finite Bayesian game $(\Theta, \mu, A, u)$:</p>
+
+        <ul class="mt-1">
+          <li><strong>State space:</strong> $\Theta = \Theta_0 \times \Theta_1 \times \cdots \times \Theta_n$
+            <ul>
+              <li class="small">$\Theta_0$: payoff-relevant common state - e.g. market conditions</li>
+              <li class="small">$\Theta_i$: private type of player $i$ - e.g. costs</li>
+            </ul>
+          </li>
+          <li class="mt-1"><strong>Common prior:</strong> $\mu \in \Delta(\Theta)$</li>
+          <li class="mt-1"><strong>Actions:</strong> $A = A_1 \times \cdots \times A_n$ (finite)</li>
+          <li class="mt-1"><strong>Payoffs:</strong> $u_i: \Theta \times A \to \R$ </li>
+        </ul>
+
+        <p class="mt-2"><strong>Timing:</strong>&ensp;Nature draws $\theta \sim \mu$ → player $i$ observes $\theta_i$ →
+          simultaneous actions → payoffs</p>
+
+        <p class="mt-1 gray small">Both private-value and common-value
+          environments.</p>
+      </section>
+
+
+      <!-- Model: Learning Trajectories -->
+      <!-- Model: Repeated Interaction -->
+      <section>
+        <h2>Batched Learning</h2>
+
+        <p>Players' algorithms update decisions over periods $t = 1, 2, \ldots$</p>
+
+        <p class="mt-2">Each period, algorithm $i$ selects:</p>
+        <ul>
+          <li><strong>Forecasting rule:</strong> $\phi_i^t: \Theta_i \to \Delta(\Theta_{-i} \times A_{-i})$</li>
+          <li><strong>Playing rule:</strong> $s_i^t: \Theta_i \to A_i$</li>
+        </ul>
+
+        <!-- <p>In a single period, algorithms interact in many markets: <br>
+          &rarr; observe enough data s.t. the empirical distribution of $\theta$ matches true
+          distribution $\mu$</p> -->
+        <!-- <ul>
+          <li>Each period: many interactions, under fixed algorithmic choicenew state $\theta^t \sim \mu$ drawn i.i.d.
+          </li>
+          <li>Player $i$ observes own type $\theta_i^t$, chooses action $a_i^t$</li>
+        </ul>
+
+        <p class="mt-2">Each period, player $i$ selects:</p>
+        <ul>
+          <li><strong>Forecasting rule:</strong> $\phi_i^t: \Theta_i \to \Delta(\Theta_{-i} \times A_{-i})$</li>
+          <li><strong>Playing rule:</strong> $s_i^t: \Theta_i \to A_i$</li>
+        </ul> -->
+
+        <p class="mt-2"><strong>Key assumption:</strong> each period, algorithms interact in many markets <br>
+          &rarr; the algorithm's empirical distribution of $\theta$ matches the true distribution $\mu$
+        </p>
+        <p class="mt-1 gray small">Analogous to <em>batching</em> in RL: the algorithm accumulates sufficient
+          observations per state before updating — natural when interactions are frequent relative to policy updates</p>
+      </section>
+
+      <!-- Model: Learning Trajectories -->
+      <section>
+        <h2>Learning Trajectories</h2>
+
+        <p>A <span class="red bold">learning trajectory</span> $(s, \phi)$ is a pair of</p>
+
+        <ul class="mt-1">
+          <li><strong>Playing rules:</strong> $s = (\{s_i^t\}_{t \in \mathbb{N}})_i$ </li>
+          <li class="mt-1"><strong>Forecasting rules:</strong> $\phi = (\{\phi_i^t\}_{t \in \mathbb{N}})_i$ </li>
+        </ul>
+
+        <p class="mt-2">A trajectory generates a sequence of <span class="red bold">empirical distributions</span>
+          $\{\rho^t\}_{t \in \mathbb{N}}$ over $\Theta \times A$:</p>
+
+        <ul class="mt-1">
+          <li>$\rho^t = $ uniform average over pushforward measures induced by $\theta \mapsto (\theta, s^\tau(\theta))$
+            for $\tau \leq t$ </li>
+        </ul>
+
+        <p class="mt-2">The <span class="red bold">limit points</span> of $\{\rho^t\}$ describe the long-run outcomes of
+          algorithmic interaction</p>
+
+      </section>
+
+      <!-- Model: Behavioral Requirements 1  -->
+      <section>
+        <h2>Algorithms</h2>
+
+        <p>We impose three requirements on the learning trajectory</p>
+
+        <div class="theorem-block mt-2">
+          <p class="theorem-title">1. Calibration</p>
+          <p>Forecasts are asymptotically correct:</p>
+          <p>$$\lim_{t \to \infty} \sum_{\varphi_i} \sum_{\theta_i} \sum_{\theta_{-i}, a_{-i}} W^t_i(\varphi_i) \left|
+            \rho^t(\theta_{-i}, a_{-i} \mid \varphi_i, \theta_i) - \varphi_i(\theta_{-i}, a_{-i} \mid \theta_i) \right|
+            \mu_i(\theta_i) = 0$$</p>
+          <p>where $\rho^t$ is the pushforward of $\mu$ under forecast $\varphi_i$ and $W_i^t(\varphi_i)$ is the
+            empirical
+            frequency of forecast $\varphi_i$ up to time $t$.</p>
+        </div>
+
+        <!-- <div class="theorem-block mt-1">
+          <p class="theorem-title">2. Stationarity</p>
+          <p>Same forecast ⇒ same action: $\phi_i^\tau = \phi_i^{\tau'} \;\Rightarrow\; s_i^\tau = s_i^{\tau'}$</p>
+        </div>
+
+        <div class="theorem-block mt-1">
+          <p class="theorem-title">3. Rationality</p>
+          <p>Players always best-respond to their current forecast</p>
+        </div> -->
+
+        <p class="mt-2"><strong>Intuitively:</strong> over time, what you <em>predicted</em> would happen (conditional
+          on your type and
+          forecast) matches what <em>actually</em> happened</p>
+      </section>
+
+      <!-- Model: Behavioral Requirements 2  -->
+      <section>
+        <h2>Algorithms</h2>
+
+        <p>We impose three requirements on the learning trajectory</p>
+
+        <!-- <div class="theorem-block mt-2">
+          <p class="theorem-title">1. Calibration</p>
+          <p>Forecasts are asymptotically correct:</p>
+          <p>$$\lim_{t \to \infty} \sum_{\varphi_i} \sum_{\theta_i} \sum_{\theta_{-i}, a_{-i}} W^t_i(\varphi_i) \left|
+            \rho^t(\theta_{-i}, a_{-i} \mid \varphi_i, \theta_i) - \varphi_i(\theta_{-i}, a_{-i} \mid \theta_i) \right|
+            \mu_i(\theta_i) = 0$$</p>
+          <p>where $\rho^t$ is the pushforward of $\mu$ under forecast $\phi_i$ and $W_i^t(\phi_i)$ is the empirical
+            frequency of forecast $\phi_i$ up to time $t$.</p>
+        </div> -->
+
+        <div class="theorem-block mt-1">
+          <p class="theorem-title">2. Stationarity</p>
+          <p>Same forecast ⇒ same action: </p>
+          <p>$\phi_i^\tau = \phi_i^{\tau'} \;\Rightarrow\; s_i^\tau = s_i^{\tau'}$</p>
+
+        </div>
+
+        <p style="color:white">where $\rho^t$ is the pushforward of $\mu$ under forecast $\phi_i$ and $W_i^t(\phi_i)$
+          is the empirical
+          frequency of forecast $\phi_i$ up to time $t$.</p>
+        <!-- <div class="theorem-block mt-1">
+          <p class="theorem-title">3. Rationality</p>
+          <p>Players always best-respond to their current forecast</p>
+        </div> -->
+
+        <p class="mt-2"><strong>Intuitively:</strong> players don't randomize arbitrarily. Given the same beliefs, they
+          do the same thing
+        </p>
+
+
+      </section>
+
+      <!-- Model: Behavioral Requirements 3  -->
+      <section>
+        <h2>Algorithms</h2>
+
+        <p>We impose three requirements on the learning trajectory</p>
+
+
+
+        <!-- <div class="theorem-block mt-1">
+          <p class="theorem-title">2. Stationarity</p>
+          <p>Same forecast ⇒ same action: </p>
+          <p>$\phi_i^\tau = \phi_i^{\tau'} \;\Rightarrow\; s_i^\tau = s_i^{\tau'}$</p>
+
+        </div> -->
+
+
+        <div class="theorem-block mt-1">
+          <p class="theorem-title">3. Rationality</p>
+          <p>Players always best-respond to their current forecast</p>
+          <p>$\sum_{\theta_{-i},a_{-i}} \bigg
+            (u_i(\theta,b,a_{-i})-u_i(\theta,s_i^t(\theta_i),a_{-i})\bigg)\phi_i^t(\theta_{-i},a_{-i}\mid\theta_i)\leq
+            0$</p>
+          <p>for all $\theta_i \in \Theta_i$ and $b \in A_i$.</p>
+        </div>
+
+        <p class="mt-2"><strong>Intuitively:</strong> algorithms play optimally conditional on their forecast.
+        </p>
+
+        <!-- <p style="color:white">where $\rho^t$ is the pushforward of $\mu$ under forecast $\phi_i$ and $W_i^t(\phi_i)$
+          is the empirical
+          frequency of forecast $\phi_i$ up to time $t$.</p> -->
+        <!-- <p class="mt-2 gray small" ; style="color:white">These are minimal requirements — satisfied by many standard
+          algorithms (e.g.,
+          calibrated forecasting + best-response dynamics)</p> -->
+      </section>
+
+
+      
+
+
+      <!-- ============================================================
+     SECTION DIVIDER: MAIN RESULTS
+     ============================================================ -->
+      <section class="section-slide">
+        <h2>Main Results</h2>
+      </section>
+
+
+      <!-- Theorem 1: Convergence — stated in terms of conditions on rho -->
+      <section>
+        <h2>Convergence</h2>
+
+        <div class="theorem-block">
+          <p class="theorem-title">Theorem 1</p>
+          <p>For all Bayesian games, all limit points $\rho$ of a <span class="red bold">stationary</span>, <span
+              class="red bold">calibrated</span>, and <span class="red bold">rational</span> learning trajectory
+            satisfy:</p>
+          <ul class="mt-1">
+            <li><strong>Feasibility:</strong>&ensp;$\rho_\Theta = \mu$ &ensp;(marginal
+              over states = prior)</li>
+            <li style="color:var(--red-light)"><strong>Obedience:</strong>&ensp;No player can profitably deviate
+              <p class="small">$\displaystyle\sum_{\theta, a} u_i(\theta, \alpha_i(\theta_i, a_i), a_{-i}) \rho(\theta,
+                a)
+                \leq \sum_{\theta, a} u_i(\theta, a) \rho(\theta, a) \quad \forall\, \alpha_i$</p>
+            </li>
+            <li style="color:var(--red-light)"><strong>Privacy:</strong>&ensp;Player $i$'s action under $\rho$ depends
+              only on own type
+              <p class="small">$\rho(a_i \mid \theta_i, \theta_{-i}) = \rho(a_i \mid \theta_i) \quad \forall\, i,
+                \theta, a_i$</p>
+            </li>
+          </ul>
+        </div>
+
+      </section>
+
+      <section>
+        <h2>Convergence</h2>
+
+        <div class="theorem-block">
+          <p class="theorem-title">Theorem 1</p>
+          <p>For all Bayesian games, all limit points $\rho$ of a <span class="red bold">stationary</span>, <span
+              class="red bold">calibrated</span>, and <span class="red bold">rational</span> learning trajectory
+            satisfy:</p>
+          <ul class="mt-1">
+            <li><strong>Feasibility:</strong>&ensp;$\rho_\Theta = \mu$ &ensp;(marginal
+              over states = prior)</li>
+            <li><strong>Obedience:</strong>&ensp;No player can profitably deviate
+              <p class="small">$\displaystyle\sum_{\theta, a} u_i(\theta, \alpha_i(\theta_i, a_i), a_{-i}) \rho(\theta,
+                a)
+                \leq \sum_{\theta, a} u_i(\theta, a) \rho(\theta, a) \quad \forall\, \alpha_i$</p>
+            </li>
+            <li style="color:var(--red-light)"><strong>Privacy:</strong>&ensp;Player $i$'s action under $\rho$ depends
+              only on own type
+              <p class="small">$\rho(a_i \mid \theta_i, \theta_{-i}) = \rho(a_i \mid \theta_i) \quad \forall\, i,
+                \theta, a_i$</p>
+            </li>
+          </ul>
+        </div>
+
+      </section>
+
+      <section>
+        <h2>Convergence</h2>
+
+        <div class="theorem-block">
+          <p class="theorem-title">Theorem 1</p>
+          <p>For all Bayesian games, all limit points $\rho$ of a <span class="red bold">stationary</span>, <span
+              class="red bold">calibrated</span>, and <span class="red bold">rational</span> learning trajectory
+            satisfy:</p>
+          <ul class="mt-1">
+            <li><strong>Feasibility:</strong>&ensp;$\rho_\Theta = \mu$ &ensp;(marginal
+              over states = prior)</li>
+            <li><strong>Obedience:</strong>&ensp;No player can profitably deviate
+              <p class="small">$\displaystyle\sum_{\theta, a} u_i(\theta, \alpha_i(\theta_i, a_i), a_{-i}) \rho(\theta,
+                a)
+                \leq \sum_{\theta, a} u_i(\theta, a) \rho(\theta, a) \quad \forall\, \alpha_i$</p>
+            </li>
+            <li><strong>Privacy:</strong>&ensp;Player $i$'s action under $\rho$ depends only on own type
+              <p class="small">$\rho(a_i \mid \theta_i, \theta_{-i}) = \rho(a_i \mid \theta_i) \quad \forall\, i,
+                \theta, a_i$</p>
+            </li>
+          </ul>
+        </div>
+
+      </section>
+
+      <!-- Intuition SLIDE 1-->
+      <section>
+        <h2>Intuition</h2>
+
+        <p> &rarr; <span class="red bold">Feasibility</span> is clear: states drawn from the prior each period
+          and $\rho$ is a pushforward
+          of the prior &ensp;✓</p>
+        <p style="color:white"> &rarr; <span>Privacy</span> Types are drawn i.i.d. so actions can't possibly correlate
+          to the current type of the <br> &ensp; &nbsp; opponent (but they can correlate with the opponent's actions)
+          &ensp;✓</p>
+        <p style="color:white"> &rarr; <span>Obedience</span> requires all three assumptions: <br>
+          &ensp; &nbsp; Stationarity &rarr; $\rho^t$ is a mixture over forecasts <br>
+          &ensp; &nbsp; Calibration &rarr; forecasts converge, so $\rho^t$ converges to forecast<br>
+          &ensp; &nbsp; Rewrite obedience condition with forecast instead of $\rho^t$ &rarr; Rationality
+          &ensp;✓</p>
+      </section>
+
+      <!-- Intuition SLIDE 2-->
+      <section>
+        <h2>Intuition</h2>
+
+        <p> &rarr; <span class="red bold">Feasibility</span> is clear: states drawn from the prior each period
+          and $\rho$ is a pushforward
+          of the prior &ensp;✓</p>
+        <p> &rarr; <span class="red bold">Privacy:</span> Types are drawn i.i.d. so actions can't possibly correlate
+          to the current type of the <br> &ensp; &nbsp; opponent (but they can correlate with the opponent's actions)
+          &ensp;✓</p>
+        <p style="color:white"> &rarr; <span>Obedience</span> requires all three assumptions: <br>
+          &ensp; &nbsp; Stationarity &rarr; $\rho^t$ is a mixture over forecasts <br>
+          &ensp; &nbsp; Calibration &rarr; forecasts converge, so $\rho^t$ converges to forecast<br>
+          &ensp; &nbsp; Rewrite obedience condition with forecast instead of $\rho^t$ &rarr; Rationality
+          &ensp;✓</p>
+      </section>
+
+      <!-- Intuition SLIDE 3-->
+      <section>
+        <h2>Intuition</h2>
+
+        <p> &rarr; <span class="red bold">Feasibility</span> is clear: states drawn from the prior each period
+          and $\rho$ is a pushforward
+          of the prior &ensp;✓</p>
+        <p> &rarr; <span class="red bold">Privacy:</span> Types are drawn i.i.d. so actions can't possibly correlate
+          to the current type of the <br> &ensp; &nbsp; opponent (but they can correlate with the opponent's actions)
+          &ensp;✓</p>
+        <p> &rarr; <span class="red bold">Obedience</span> requires all three assumptions: <br>
+          &ensp; &nbsp; Stationarity &rarr; $\rho^t$ is a mixture over forecasts <br>
+          &ensp; &nbsp; Calibration &rarr; forecasts converge, so $\rho^t$ converges to forecast<br>
+          &ensp; &nbsp; Rewrite obedience condition with forecast instead of $\rho^t$ &rarr; Rationality
+          &ensp;✓</p>
+      </section>
+
+
+      <!-- PCE: Naming the concept -->
+      <section>
+        <h2>Privately Correlated Equilibrium</h2>
+
+        <div class="theorem-block definition-block">
+          <p class="theorem-title">Definition</p>
+          <p>A joint distribution $\rho \in \Delta(\Theta \times A)$ satisfying <strong>feasibility</strong>,
+            <strong>obedience</strong>, and <strong>privacy</strong> is a <span class="red bold">Privately
+              Correlated Equilibrium (PCE)</span>.
+          </p>
+        </div>
+
+        <p class="mt-2">Theorem 1 &rarr; <em>calibrated, stationary, rational learning converges to PCE</em></p>
+
+        <p class="mt-2"><strong>This is a correlated equilibrium in games with incomplete information:</strong></p>
+        <ul class="mt-1">
+          <li>One of the <strong>five notions</strong> of correlated equilibrium
+            for Bayesian games by <span>Forges</span> (1993, 2006)</li>
+          <li class="mt-1"><span class="red bold">PCE = Belief-Invariant Bayesian Solution (BIBS)</span></li>
+          <li class="mt-1">First (?) <strong>learning foundation</strong> for incomplete info correlated
+            equilibrium
+            concept</li>
+        </ul>
+      </section>
+
+
+      <!-- Forges hierarchy -->
+      <section>
+        <h2>Aside: Forges' Hierarchy</h2>
+
+        <!-- <p>Forges' hierarchy of solution concepts, ordered by the information structure:</p> -->
+
+        <div class="mt-1" style="font-size: 1.2em;">
+          <table style="border-bottom: 1px solid #ccc; margin: 0 auto;">
+            <tr>
+              <th>Concept</th>
+              <th>Information structure</th>
+              <th>Nesting</th>
+            </tr>
+            <tr>
+              <td>BCE</td>
+              <td>Arbitrary information structure</td>
+              <td>BS $\subseteq$</td>
+            </tr>
+            <tr>
+              <td>BS</td>
+              <td>Bayesian Solution</td>
+              <td>PCE $\subseteq$</td>
+            </tr>
+            <tr>
+              <td class="red bold">BIBS = PCE</td>
+              <td class="red bold">Belief-invariant Bayesian Solution</td>
+              <td class="red bold">&larr; <em>this paper</em></td>
+            </tr>
+            <tr>
+              <td>Agent-normal CE</td>
+              <td>Orthogonal devices only</td>
+              <td>$\subseteq$ PCE</td>
+            </tr>
+            <tr>
+              <td>Strategic-form CE</td>
+              <td>Correlated strategies, belief-invariant</td>
+              <td>$\subseteq$ Agent-normal CE</td>
+            </tr>
+            <tr>
+              <td>BNE</td>
+              <td>Independent strategies</td>
+              <td>$\subseteq$ Strategic-form CE</td>
+            </tr>
+          </table>
+        </div>
+        <!-- <p class="mt-1 gray small">When no private information: privacy is vacuous and PCE = BCE</p> -->
+      </section>
+
+      <!-- IMPORTANT SLIDE, UPSHOT -> SHOWCASE ALL THE POWER -->
+      <section>
+        <h2>Upshot of Theorem 1?</h2>
+
+        <p class="medium"><strong>1.</strong>  <span class="red bold">Learning foundation</span> for an incomplete information 
+          equilibrium concept</p>
+        <ul class="smaller">
+          <li>(Foster and Vohra, 1997) for complete info games</li>
+        </ul>
+
+        <p class="medium" style="visibility:hidden"><strong>2.</strong>  The set of PCE is a convex <span class="red bold">polytope</span></p>
+          <ul class="smaller" style="visibility:hidden">
+            <li>Extreme points maximize linear functionals over the parameters</li>
+            <li>Computation is efficient</li>
+          </ul>
+
+        <p class="medium" style="visibility:hidden"><strong>3. (mkt. design)</strong> Worst-case PCE $\iff$ notion 
+          of <span class="red bold">robustness</span> wrt algorithmic play</p>
+        <ul class="smaller" style="visibility:hidden">
+          <li>Parallel to info design (Bergemann and Morris, 2016) for BCE</li>
+        </ul>
+
+        <p class="medium" style="visibility:hidden"><strong>4. (regulation)</strong> Tool for <span class="red bold">prediction</span> 
+          and <span class="red bold">modeling</span>:</p>
+        <ul class="smaller" style="visibility:hidden">
+          <li>Which market structures give rise to gap $PCE \setminus BNE$?</li>
+          <li>Disciplines lawful vs unlawful algorithmic information sharing (Lomys and Magnolfi, 2026)</li>
+        </ul>
+        
+      </section>
+
+      <section>
+        <h2>Upshot of Theorem 1?</h2>
+
+        <p class="medium"><strong>1.</strong>  <span class="red bold">Learning foundation</span> for an incomplete information 
+          equilibrium concept</p>
+        <ul class="smaller">
+          <li>(Foster and Vohra, 1997) for complete info games</li>
+        </ul>
+
+        <p class="medium"><strong>2.</strong>  The set of PCE is a convex <span class="red bold">polytope</span></p>
+          <ul class="smaller">
+            <li>Extreme points maximize linear functionals over the parameters</li>
+            <li>Computation is efficient</li>
+          </ul>
+
+        <p class="medium" style="visibility:hidden"><strong>3. (mkt. design)</strong> Worst-case PCE $\iff$ notion 
+          of <span class="red bold">robustness</span> wrt algorithmic play</p>
+        <ul class="smaller" style="visibility:hidden">
+          <li>Parallel to info design (Bergemann and Morris, 2016) for BCE</li>
+        </ul>
+
+        <p class="medium" style="visibility:hidden"><strong>4. (regulation)</strong> Tool for <span class="red bold">prediction</span> 
+          and <span class="red bold">modeling</span>:</p>
+        <ul class="smaller" style="visibility:hidden">
+          <li>Which market structures give rise to gap $PCE \setminus BNE$?</li>
+          <li>Disciplines lawful vs unlawful algorithmic information sharing (Lomys and Magnolfi, 2026)</li>
+        </ul>
+        
+      </section>
+
+      <section>
+        <h2>Upshot of Theorem 1?</h2>
+
+        <p class="medium"><strong>1.</strong>  <span class="red bold">Learning foundation</span> for an incomplete information 
+          equilibrium concept</p>
+        <ul class="smaller">
+          <li>(Foster and Vohra, 1997) for complete info games</li>
+        </ul>
+
+        <p class="medium"><strong>2.</strong>  The set of PCE is a convex <span class="red bold">polytope</span></p>
+          <ul class="smaller">
+            <li>Extreme points maximize linear functionals over the parameters</li>
+            <li>Computation is efficient</li>
+          </ul>
+
+        <p class="medium"><strong>3. (mkt. design)</strong> Worst-case PCE $\iff$ notion 
+          of <span class="red bold">robustness</span> wrt algorithmic play</p>
+        <ul class="smaller">
+          <li>Parallel to info design (Bergemann and Morris, 2016) for BCE</li>
+        </ul>
+
+        <p class="medium" style="visibility:hidden"><strong>4. (regulation)</strong> Tool for <span class="red bold">prediction</span> 
+          and <span class="red bold">modeling</span>:</p>
+        <ul class="smaller" style="visibility:hidden">
+          <li>Which market structures give rise to gap $PCE \setminus BNE$?</li>
+          <li>Disciplines lawful vs unlawful algorithmic information sharing (Lomys and Magnolfi, 2026)</li>
+        </ul>
+        
+      </section>
+
+      <section>
+        <h2>Upshot of Theorem 1?</h2>
+
+        <p class="medium"><strong>1.</strong>  <span class="red bold">Learning foundation</span> for an incomplete information 
+          equilibrium concept</p>
+        <ul class="smaller">
+          <li>(Foster and Vohra, 1997) for complete info games</li>
+        </ul>
+
+        <p class="medium"><strong>2.</strong>  The set of PCE is a convex <span class="red bold">polytope</span></p>
+          <ul class="smaller">
+            <li>Extreme points maximize linear functionals over the parameters</li>
+            <li>Computation is efficient</li>
+          </ul>
+
+        <p class="medium"><strong>3. (mkt. design)</strong> Worst-case PCE $\iff$ notion 
+          of <span class="red bold">robustness</span> wrt algorithmic play</p>
+        <ul class="smaller">
+          <li>Parallel to info design (Bergemann and Morris, 2016) for BCE</li>
+        </ul>
+
+        <p class="medium"><strong>4. (regulation)</strong> Tool for <span class="red bold">prediction</span> 
+          and <span class="red bold">modeling</span>:</p>
+        <ul class="smaller">
+          <li>Which market structures give rise to gap $PCE \setminus BNE$?</li>
+          <li>Disciplines lawful vs unlawful algorithmic information sharing (Lomys and Magnolfi, 2026)</li>
+        </ul>
+        
+      </section>
+
+      <!-- BNE vs PCE vs BCE -->
+      <section>
+        <h2>In particular, two familiar benchmarks</h2>
+
+        <p class="bold">BNE — Independent decision-makers <br>
+          <span class="small normalfont">Each player best-responds independently</span>
+        </p>
+
+        <p class="bold" style="color:white">PCE — Algorithmic correlation <br>
+          <span class="small normalfont" style="color:white">Algorithms condition on <span class="bold">shared
+              histories</span> &rarr; correlation but no private information pooling</span>
+        </p>
+
+        <p class="bold" style="color:white">BCE — Mediated coordination <br> <span class="small normalfont"
+            style="color:white">Mediator
+            (e.g., RealPage) 
+            pools private types and sends correlated recommendations</span> </p>
+
+        <p class="mt-2" style="visibility:hidden">$$\text{BNE} \;\subseteq\; \text{PCE} \;\subseteq\; \text{BCE}$$</p>
+      </section>
+
+      
+
+      <section>
+        <h2>In particular, two familiar benchmarks</h2>
+
+        <p class="bold">BNE — Independent decision-makers <br>
+          <span class="small normalfont">Each player best-responds independently</span>
+        </p>
+
+        <p class="red bold">PCE — Algorithmic correlation <br>
+          <span class="small normalfont black">Algorithms condition on <span class="red bold">shared histories</span>
+            &rarr; correlation but no private information pooling</span>
+        </p>
+
+        <p class="bold" style="visibility:hidden">BCE — Mediated coordination <br> <span class="small normalfont">Mediator
+            (e.g., RealPage) 
+            pools private types and sends correlated recommendations</span> </p>
+
+        <p class="mt-2" style="visibility:hidden">$$\text{BNE} \;\subseteq\; \text{PCE} \;\subseteq\; \text{BCE}$$</p>
+      </section>
+
+      <section>
+        <h2>In particular, two familiar benchmarks</h2>
+
+        <p class="bold">BNE — Independent decision-makers <br>
+          <span class="small normalfont">Each player best-responds independently</span>
+        </p>
+
+        <p class="red bold">PCE — Algorithmic correlation <br>
+          <span class="small normalfont black">Algorithms condition on <span class="red bold">shared histories</span>
+            &rarr; correlation but no private information pooling</span>
+        </p>
+
+        <p class="bold">BCE — Mediated coordination <br> <span class="small normalfont">Mediator
+            (e.g., RealPage) 
+            pools private types and sends correlated recommendations</span> </p>
+
+        <p class="mt-2">$$\text{BNE} \;\subseteq\; \text{PCE} \;\subseteq\; \text{BCE}$$</p>
+      </section>
+
+      <section class="section-slide">
+        <h2>Applications</h2>
+      </section>
+
+      
+      <!-- Application 1: Vives common-demand benchmark -->
+      <section>
+        <h2>Vives (1999)</h2>
+
+        <p>Canonical environment: differentiated Bertrand with a common demand shifter.</p>
+        <p class="small">$$D_i(p_i,p_j,\theta)=\theta-p_i+\gamma p_j,\qquad
+        u_i(p_i,p_j,\theta)=p_i\big(\theta-p_i+\gamma p_j\big).$$</p>
+
+        <ul class="mt-1">
+          <li>Each firm gets a private signal $t_i$ about the same shock $\theta$</li>
+          <li>Vives (1999) shows that strategic complements &rarr; sharing demand information raises prices</li>
+          <li>Why? Information sharing makes posterior beliefs about demand more volatile</li>
+          <li>In our model &rarr; <span class="red bold">correlation in prices</span> is isolated from belief shifts</li>
+        </ul>
+
+        <p class="mt-2">The Vives eq. is a communication equilibrium. We restrict to PCE</p>
+      </section>
+
+
+      <!-- Application 2: Collapse mechanics under BIBS/PCE -->
+      <section>
+        <h2>Solving for PCE</h2>
+
+        <p class="small">Profit of firm $i$ when recommended $p_i$ &rarr; $\mathbb{E}\left[p_i\big(\theta-p_i+\gamma p_j\big) | t_i,p_i \right]$</p>
+
+        <p class="small"><strong>Obedience</strong> &rarr; $2p_i=\E[\theta\mid t_i,p_i]+\gamma\,\E[p_j\mid t_i,p_i]$</p>
+
+
+
+        <p class="small"><strong>Belief Invariance</strong> &rarr; $\E[\theta\mid t_i,p_i]=\E[\theta\mid t_i]=\mu_i(t_i)$</p>
+
+        <p class="small">So the FOC becomes:</p>
+        <p class="small" style="margin-top:0.1em; margin-bottom:0.35em;">$$2p_i=\mu_i(t_i)+\gamma\,\E[p_j\mid t_i,p_i]$$</p>
+
+        <p class="small mt-2">Compare with BNE FOC:</p>
+        <p class="small" style="margin-top:0.1em;">$$2\beta_i(t_i)=\mu_i(t_i)+\gamma\,\E[\beta_j(t_j)\mid t_i]$$</p>
+      </section>
+
+      <!-- Application 3: Completing the proof -->
+      <section>
+        <h2>Completing the Proof</h2>
+
+        <p> Using again belief invariance, we get 
+          $\mathbb{E}\left[p_i - \beta_i(t_i) \right]= \frac{\gamma}{2}\mathbb{E}\left[p_j - \beta_j(t_j)\right] = \frac{\gamma^2}{4}\mathbb{E}\left[p_i - \beta_i(t_i)\right]$
+        </p>
+        
+        <div class="theorem-block">
+          <p class="theorem-title">Proposition</p>
+          <p>When $\gamma \neq 2$ there is a unique PCE, and it is the unique BNE:</p>
+          <p>$$p_i=\beta_i(t_i)\quad\text{a.s.}$$</p>
+        </div>
+
+        <ul class="mt-2">
+          <li>Without posterior shifts, recommendations cannot move prices away from BNE</li>
+          <li>Info sharing in oligopoly requires communication &rarr; belongs to BCE, not PCE.</li>
+        </ul>
+        <p>$$PCE \subset BCE$$</p>
+      </section>
+
+      <section>
+        <h2>Supermodular games</h2>
+
+        <p> The previous argument is an instance of a more general result for the class of monotone supermodular games.</p>
+
+        <div class="theorem-block">
+          <p class="theorem-title">Theorem 2</p>
+          <p>In any Bayesian game, every PCE is supported solely on interim correlated rationalizable actions.</p>
+        </div>
+
+        <p>If a game is ICR solvable &rarr; the PCE is unique (and coincides with the BNE)</p>
+        <p>&ensp; &ensp; &ensp; &ensp; &ensp; &ensp; &ensp; &ensp; &ensp; &ensp; &ensp;
+          &ensp; &ensp; &nbsp; &rarr; symmetric monotone supermodular games have a unique PCE</p>
+        
+    
+
+      </section>
+
+      <!-- ============================================================
+     OLIGOPOLY PRICING EXAMPLE SLIDES
+     ============================================================ -->
+
+      <!-- Example Slide 1: Setup -->
+      <section>
+        <h2>Example: Oligopoly Pricing</h2>
+
+        <p>Two firms compete across markets $A$ and $B$</p>
+
+        <ul class="mt-1">
+          <li><strong>State</strong> $\theta \in \{A,B\}$ (equally likely): which market can support lower prices</li>
+          <li>Alice Inc. <span class="red bold">privately observes</span> $\theta$; &ensp; Bob Ltd. does not</li>
+          <li>Alice chooses which market to cut prices in: $\sigma_a(\theta) \in \{A, B\}$</li>
+          <li>Bob sets a <strong>uniform price</strong>: $p_H$ (high) or $p_L$ (low)</li>
+        </ul>
+
+        <div class="columns mt-2">
+          <div class="col">
+            <p class="bold small" style="margin-bottom:0.2em;">$\theta = A$</p>
+            <table class="payoff-matrix">
+              <tr><th class="empty"></th><th>$p_H$</th><th>$p_L$</th></tr>
+              <tr><th>$A$</th><td>$10,\;4$</td><td>$0,\;0$</td></tr>
+              <tr><th>$B$</th><td>$8,\;8$</td><td>$5,\;9$</td></tr>
+            </table>
+            <p class="tiny gray" style="margin-top:0.2em;">$a_1 = A$: cuts the right market</p>
+          </div>
+          <div class="col">
+            <p class="bold small" style="margin-bottom:0.2em;">$\theta = B$</p>
+            <table class="payoff-matrix">
+              <tr><th class="empty"></th><th>$p_H$</th><th>$p_L$</th></tr>
+              <tr><th>$A$</th><td>$8,\;8$</td><td>$5,\;9$</td></tr>
+              <tr><th>$B$</th><td>$10,\;4$</td><td>$0,\;0$</td></tr>
+            </table>
+            <p class="tiny gray" style="margin-top:0.2em;">$a_1 = B$: cuts the right market</p>
+          </div>
+        </div>
+      
+      </section>
+
+
+      <!-- Example Slide 2: BNE Analysis -->
+      <section>
+        <h2>In BNE, Alice exploits its info</h2>
+
+        <p>Bob cannot condition on $\theta$ → plays a <strong>single mixed strategy</strong> $q = \P(\sigma_b = p_H)$</p>
+
+        <div class="mt-1">
+          <p class="bold">Pure-strategy BNEs:</p>
+          <ul>
+            <li>Firm 1 cuts the right market, Firm 2 plays $p_H$:
+              &ensp; payoffs $(10,4)$ &ensp;→&ensp; industry profit = 14</li>
+            <li>Firm 1 never cuts the right market, Firm 2 plays $p_L$:
+              &ensp; payoffs $(5,9)$ &ensp;→&ensp; industry profit = 14</li>
+          </ul>
+        </div>
+
+        <div class="mt-2">
+          <p class="bold">Best mixed BNE:</p>
+          <ul>
+            <li>$q = 5/7$, &ensp; Alice plays $\sigma_a(\theta) = \theta$ with prob $1/5$</li>
+            <!-- <li><span class="red bold">Price war $(0,0)$ occurs with positive probability</span></li> -->
+          </ul>
+        </div>
+
+        <p class="mt-1">$$\E[\Pi]_{\text{BNE}}^* = \tfrac{50}{7} + \tfrac{36}{5} = \tfrac{502}{35} \approx 14.34$$</p>
+      </section>
+
+
+      <!-- Example Slide 3: Why BNE Limits Profits
+      <section>
+        <h2>Why BNE Limits Industry Profit</h2>
+
+        <div class="highlight-box red-box">
+          <p><strong>Core tension:</strong> Firm 1 <em>knows</em> which market can support lower prices — but in BNE it has a unilateral incentive to <span class="red bold">exploit</span> this knowledge</p>
+        </div>
+
+        <div class="mt-2">
+          <ul>
+            <li>Firm 2 is uninformed → its pricing is <strong>fixed across states</strong></li>
+            <li class="mt-1">Firm 1 can always deviate to cut in the right market (gaining $10$ vs. $8$)</li>
+            <li class="mt-1">This competitive use of information creates <span class="red bold">price war risk</span> and destroys surplus</li>
+          </ul>
+        </div>
+
+        <p class="mt-2"><strong>Key constraint:</strong> independent strategies cannot commit Firm 1 to use its information <em>cooperatively</em></p>
+      </section> -->
+
+
+      <!-- Example Slide 4: PCE Mechanism -->
+      <section>
+        <h2>PCE: Coordinated Recommendations</h2>
+
+        <p>An algorithm recommends action pairs $(\sigma_a, \sigma_b)$:</p>
+
+        <div class="columns mt-1">
+          <div class="col">
+            <p class="bold small" style="margin-bottom:0.3em;">State $\theta = A$:</p>
+            <table class="payoff-matrix" style="font-size:0.9em;">
+              <tr><th class="empty"></th><th>$p_H$</th><th>$p_L$</th></tr>
+              <tr><th>$A$</th><td>$1/4$</td><td>$0$</td></tr>
+              <tr><th>$B$</th><td class="blue bold">$1/2$</td><td>$1/4$</td></tr>
+            </table>
+          </div>
+          <div class="col">
+            <p class="bold small" style="margin-bottom:0.3em;">State $\theta = B$:</p>
+            <table class="payoff-matrix" style="font-size:0.9em;">
+              <tr><th class="empty"></th><th>$p_H$</th><th>$p_L$</th></tr>
+              <tr><th>$A$</th><td class="blue bold">$1/2$</td><td>$1/4$</td></tr>
+              <tr><th>$B$</th><td>$1/4$</td><td>$0$</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <p class="mt-1">Outcome $(8,8)$ occurs with prob $1/2$, Outcome $(0,0)$ never</p>
+
+        <div class="highlight-box red-box mt-2">
+          <strong>Note:</strong> Bob's recommendation is correlated with the state 
+          <strong>and</strong> with the action of Alice! Yet Bob's posterior about the 
+          state is unchanged.
+        </div>
+
+        
+      </section>
+
+
+      <!-- Example Slide 5: Privacy -->
+      <section>
+        <h2>Privacy</h2>
+
+        <div class="columns mt-1">
+          <div class="col">
+            <p class="bold small" style="margin-bottom:0.3em;">State $\theta = A$:</p>
+            <table class="payoff-matrix" style="font-size:0.6em;">
+              <tr><th class="empty"></th><th>$p_H$</th><th>$p_L$</th></tr>
+              <tr><th>$A$</th><td>$1/4$</td><td>$0$</td></tr>
+              <tr><th>$B$</th><td class="blue bold">$1/2$</td><td>$1/4$</td></tr>
+            </table>
+          </div>
+          <div class="col">
+            <p class="bold small" style="margin-bottom:0.3em;">State $\theta = B$:</p>
+            <table class="payoff-matrix" style="font-size:0.6em;">
+              <tr><th class="empty"></th><th>$p_H$</th><th>$p_L$</th></tr>
+              <tr><th>$A$</th><td class="blue bold">$1/2$</td><td>$1/4$</td></tr>
+              <tr><th>$B$</th><td>$1/4$</td><td>$0$</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <p style="visibility:hidden">Bob's marginal recommendation is <strong>identical</strong> across states:</p>
+
+        <div class="mt-1" style="font-size:0.95em; visibility:hidden">
+          $$\P(\sigma_b= p_H \mid \theta = A) = \tfrac{1}{2} + \tfrac{1}{4} = \tfrac{3}{4} = \P(\sigma_b = p_H \mid \theta = B)$$
+        </div>
+
+        <p class="mt-1" style="visibility:hidden">→ Bob cannot infer $\theta$ from its recommendation</p>
+
+        <p style="visibility:hidden">Privacy is trivially satisfied for Alice.</p>
+
+        
+      </section>
+
+      <!-- Example Slide 5: Privacy -->
+      <section>
+        <h2>Privacy</h2>
+
+        <div class="columns mt-1">
+          <div class="col">
+            <p class="bold small" style="margin-bottom:0.3em;">State $\theta = A$:</p>
+            <table class="payoff-matrix" style="font-size:0.6em;">
+              <tr><th class="empty"></th><th>$p_H$</th><th>$p_L$</th></tr>
+              <tr><th>$A$</th><td>$1/4$</td><td>$0$</td></tr>
+              <tr><th>$B$</th><td class="blue bold">$1/2$</td><td>$1/4$</td></tr>
+            </table>
+          </div>
+          <div class="col">
+            <p class="bold small" style="margin-bottom:0.3em;">State $\theta = B$:</p>
+            <table class="payoff-matrix" style="font-size:0.6em;">
+              <tr><th class="empty"></th><th>$p_H$</th><th>$p_L$</th></tr>
+              <tr><th>$A$</th><td class="blue bold">$1/2$</td><td>$1/4$</td></tr>
+              <tr><th>$B$</th><td>$1/4$</td><td>$0$</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <p>Bob's marginal recommendation is <strong>identical</strong> across states:</p>
+
+        <div class="mt-1" style="font-size:0.95em;">
+          $$\P(\sigma_b= p_H \mid \theta = A) = \tfrac{1}{2} + \tfrac{1}{4} = \tfrac{3}{4} = \P(\sigma_b = p_H \mid \theta = B)$$
+        </div>
+
+        <p class="mt-1">→ Bob cannot infer $\theta$ from its recommendation</p>
+
+        <p>Privacy is trivially satisfied for Alice.</p>
+
+        
+      </section>
+
+      <section>
+        <h2>Obedience</h2>
+
+        <div class="columns mt-2">
+          <div class="col">
+            <p class="bold small" style="margin-bottom:0.2em; font-size:0.6em">$\theta = A$</p>
+            <table class="payoff-matrix" style="font-size:0.6em;">
+              <tr><th class="empty"></th><th>$p_H$</th><th>$p_L$</th></tr>
+              <tr><th>$A$</th><td>$10,\;4$</td><td>$0,\;0$</td></tr>
+              <tr><th>$B$</th><td>$8,\;8$</td><td>$5,\;9$</td></tr>
+            </table>
+          </div>
+          <div class="col">
+            <p class="bold small" style="margin-bottom:0.2em; font-size:0.6em">$\theta = B$</p>
+            <table class="payoff-matrix" style="font-size:0.6em;">
+              <tr><th class="empty"></th><th>$p_H$</th><th>$p_L$</th></tr>
+              <tr><th>$A$</th><td>$8,\;8$</td><td>$5,\;9$</td></tr>
+              <tr><th>$B$</th><td>$10,\;4$</td><td>$0,\;0$</td></tr>
+            </table>
+          </div>
+        </div>
+        
+        <p>In this equilibrium, Bob never cuts prices in the wrong market</p>
+
+        <p>Alice's information allows Bob to undercut in the right market,
+           and it simultaneously make it obedient for Alice</p>
+
+        <div class="mt-2">
+          <ul class="mt-1">
+            <li>When Bob is recommended $p_L$:
+              <ul>
+                <li class="small">If $\theta = A$, Alice is told to play $B$ <br> 
+                  &ensp; → obedient if $\left(\frac{1}{2}/\frac{3}{4}\right) 8 + \left(\frac{1}{4}/\frac{3}{4}\right) 5 > \left(\frac{1}{2}/\frac{3}{4}\right)10$  
+                   ✓</li>
+                <li class="small">Same logic for $\theta=B$
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+      </section>
+
+      <!-- Example Slide 6: The Profit Gap -->
+      <section>
+        <h2>Industry Profit</h2>
+
+        <p> Profit in this PCE is </p>
+        <p>
+          $$\frac{1}{2} \left(8+8\right) + \frac{1}{4}\left(10+4\right) + \frac{1}{4}\left(5+9\right) = 15$$
+        </p>
+        
+        <p>Recall that best BNE &rarr; 14.34</p>
+        <p>Industry profits in PCE $>$ industry profit in any BNE</p>
+       
+        <!-- <div class="columns mt-1">
+          <div class="col">
+            <div class="theorem-block">
+              <p class="theorem-title">Best BNE</p>
+              <p>$$\E[\Pi]_{\text{BNE}}^* = \tfrac{502}{35} \approx 14.34$$</p>
+              
+            </div>
+          </div>
+          <div class="col">
+            <div class="theorem-block">
+              <p class="theorem-title">PCE</p>
+              <p>$$\E[\Pi]_{\text{PCE}} = 15$$</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align:center; margin-top:1.2em;">
+          <p style="font-size:1.15em;">$$15 \;>\; 14.34 \;>\; 14$$</p>
+          <p class="red bold mt-1" style="font-size:1.05em;">Algorithmic coordination raises industry profits by ≈ 4.6% over the best BNE</p>
+        </div>
+
+        <p class="mt-2 small">Higher industry profits = higher prices for consumers. This additional surplus is <span class="red bold">extracted from consumers</span>.</p>
+       -->
+      </section> 
+
+      <section>
+        <h2>Conclusion</h2>
+
+        <p>We study <span class="red bold">algorithmic behavior</span> in games of incomplete information</p> <p>
+        We characterize the limit points of calibrated algorithmic learning</p> <p>
+        We propose the PCE as the tractable benchmark for lawful vs unlawful <span class="red bold">algorithmic coordination</span> </p>
+        <p>
+        More broadly, the learning foundation for PCE calls for 
+        <ul>
+          <li>Implementation,</li>
+          <li>Design,</li>
+          <li>and Robustness</li>
+        </ul>
+      </p>
+        <!-- <p>We provide a framework for</p>
+        <ul>
+          <li>Regulation</li>
+          <li>Market Design</li>
+          <li>Robustness</li>
+        </ul>
+        <p>in incomplete information games</p>
+        <p>Calibrated, rational and stationary algorithms converge to privately 
+          correlated equilibria </p>
+        <p>PCEs </p>
+        
+        <p>Recall that best BNE &rarr; 14.34</p>
+        <p>Industry profits in PCE $>$ industry profit in any BNE</p> -->
+      </section>
+
+      <section class="section-slide">
+        <h2>Thank you</h2>
+        <p class="smaller"> martino.banchio@unibocconi.it <br>
+          lnagel@fas.harvard.edu <br>
+          roberto.saitto@kellogg.northwestern.edu</p>
+      </section>
+
+
+      <!-- BACKUP SLIDES -->
+      <!-- Connection to Lomys-Magnolfi -->
+      <section>
+        <h2>Connection to Lomys-Magnolfi (JPE R&R)</h2>
+
+        <p class="small">Structural estimation of algorithmic pricing: do agents run no-regret algorithms?</p>
+
+        <div class="columns mt-1">
+          <div class="col">
+            <p class="bold small">Lomys-Magnolfi approach:</p>
+            <ul class="small">
+              <li>No-regret learning → convergence to $\text{BCCE}$</li>
+              <li>Use BCCE moment inequalities to partially identify cost distributions</li>
+              <li>Wide identified sets (BCCE is permissive)</li>
+            </ul>
+          </div>
+          <div class="col">
+            <p class="bold small">Our contribution:</p>
+            <ul class="small">
+              <li>Add calibration + stationarity → convergence to $\text{PCE}$ (⊊ BCCE)</li>
+              <li>Tighter behavioral restriction on play</li>
+              <li>Narrower identified set for costs and markups</li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="small mt-2">They show *how* to estimate with algorithmic agents; we show *which* solution concept is right for the class of calibrated, rational, stationary algorithms — allowing tighter structural inference.</p>
+      </section>
+
+
+      <!-- Proof sketch for convergence -->
+      <section>
+        <h2>Proof Sketch: Obedience Step</h2>
+
+        <p>The substantive step combines all three requirements:</p>
+
+        <ol class="mt-1">
+          <li>By <span class="red bold">stationarity</span>, for each forecast $\varphi_i$ there is a unique action
+            $s_i^{\varphi_i}$</li>
+          <li class="mt-1">Decompose the empirical distribution:
+            <p class="small">$\rho^t = \sum_{\varphi_i} W_i^t(\varphi_i) \cdot \rho^t(\cdot \mid \varphi_i)$</p>
+          </li>
+          <li class="mt-1">By <span class="red bold">calibration</span>, $\rho^t(\cdot \mid \varphi_i, \theta_i)
+            \approx \varphi_i(\cdot \mid \theta_i)$ as $t \to \infty$</li>
+          <li class="mt-1"><strong>Triangle inequality</strong> + uniform bound $H$ on payoff differences:
+            <p class="small">gap between payoff at empirical conditional vs. at forecast → 0</p>
+          </li>
+          <li class="mt-1">By <span class="red bold">rationality</span>, the payoff gain from deviating under each
+            $\varphi_i$ is $\leq 0$</li>
+          <li class="mt-1">The limit inherits obedience &ensp;$\blacksquare$</li>
+        </ol>
+      </section>
+
+
+      <!-- Theorem 2: Reachability -->
+      <section>
+        <h2>Reachability</h2>
+
+        <div class="theorem-block">
+          <p class="theorem-title">Theorem 2 (Reachability)</p>
+          <p>Generically, all privately correlated equilibria are limit points of some calibrated, rational, and
+            stationary learning trajectory.</p>
+          <p class="mt-1 small"><em>In particular, this holds for all private-value environments.</em></p>
+        </div>
+
+        <p class="mt-2"><strong>Proof strategy:</strong></p>
+        <ul>
+          <li>Construct explicit trajectory converging to any given PCE</li>
+          <li>Sequence strategy profiles whose time-average equals the PCE</li>
+          <li>Forecasts: mixture of empirical distribution + vanishing perturbation $(1/(t+1))$</li>
+          <li>Ensures calibration and rationality simultaneously</li>
+        </ul>
+
+        <div class="highlight-box red-box mt-2">
+          <strong>Takeaway:</strong> PCE is the <span class="red bold">tight</span> characterization of long-run
+          algorithmic outcomes in Bayesian games — nothing more, nothing less
+        </div>
+      </section>
+
+
+      <!-- ============================================================
+     SECTION DIVIDER: EPISTEMICS AND REGULATION
+     ============================================================ -->
+      <section class="section-slide">
+        <h2>Epistemics and Regulation</h2>
+      </section>
+
+
+      <!-- BNE vs PCE vs BCE -->
+      <section>
+        <h2>Three Levels of Coordination</h2>
+
+        <p>Our results place PCE precisely between two familiar benchmarks:</p>
+
+        <div class="mt-2">
+          <div
+            style="border-left: 4px solid var(--gray); padding: 0.5em 0.8em; background: #f5f5f5; border-radius: 0 4px 4px 0;">
+            <p class="bold">BNE — Independent decision-makers</p>
+            <p class="small">Each player best-responds to the prior. No correlation, no communication.</p>
+          </div>
+        </div>
+
+        <div class="mt-1">
+          <div
+            style="border-left: 4px solid var(--red); padding: 0.5em 0.8em; background: #fdf0f0; border-radius: 0 4px 4px 0;">
+            <p class="red bold">PCE — Algorithmic correlation</p>
+            <p class="small">Algorithms condition on <span class="red bold">shared histories</span> (public prices, past
+              actions). Correlation arises, but no private information is pooled.</p>
+          </div>
+        </div>
+
+        <div class="mt-1">
+          <div
+            style="border-left: 4px solid var(--dark); padding: 0.5em 0.8em; background: #f0f0f0; border-radius: 0 4px 4px 0;">
+            <p class="bold">BCE — Mediated coordination</p>
+            <p class="small">A mediator (e.g., RealPage) pools private types and sends correlated recommendations.
+              Requires a <span class="red bold">centralized information channel</span>.</p>
+          </div>
+        </div>
+
+        <p class="mt-2">$$\text{BNE} \;\subseteq\; \color{#C00000}{\text{PCE}} \;\subseteq\; \text{BCE}$$</p>
+      </section>
+
+
+      <!-- Epistemic Equivalence -->
+      <section>
+        <h2>Epistemic Equivalence</h2>
+
+        <div class="theorem-block">
+          <p class="theorem-title">Theorem 3 (Equivalence)</p>
+          <p>A distribution $\rho$ is a PCE &ensp;$\Longleftrightarrow$&ensp; it is induced by a BNE of the game
+            augmented with a <span class="red bold">belief-invariant</span> recommendation scheme.</p>
+        </div>
+
+        <p class="mt-2"><strong>Belief-invariant scheme</strong> $(M, \pi)$:</p>
+        <ul>
+          <li>Mediator observes $\theta$, draws messages $m \sim \pi(\cdot \mid \theta)$, sends $m_i$ to player $i$</li>
+          <li><span class="red">Belief-invariant</span>: $m_i \perp \theta_{-i} \mid \theta_i$ &mdash; the message does
+            not reveal opponents' types</li>
+        </ul>
+
+        <p class="mt-2"><strong>Interpretation:</strong></p>
+        <ul>
+          <li>PCE = what a <span class="red bold">constrained</span> mediator can achieve — one that cannot feed pooled
+            private info back to players</li>
+          <li>BCE $\setminus$ PCE = outcomes that <span class="red bold">require</span> centralized information sharing
+          </li>
+        </ul>
+      </section>
+
+
+      <!-- Implications for regulation -->
+      <section>
+        <h2>Implications for Regulation</h2>
+
+        <p>The $\text{BNE} \subseteq \text{PCE} \subseteq \text{BCE}$ hierarchy gives regulators a toolkit:</p>
+
+        <div class="mt-2" style="font-size: 0.95em;">
+          <p><span class="red bold">1.</span> Observe market outcome $\rho$</p>
+          <p class="mt-1"><span class="red bold">2.</span> Is $\rho \in \text{PCE}$? &rarr; Consistent with <span
+              class="red bold">independent</span> algorithmic learning. <strong>Not actionable.</strong></p>
+          <p class="mt-1"><span class="red bold">3.</span> Is $\rho \in \text{BCE} \setminus \text{PCE}$? &rarr;
+            Requires <span class="red bold">centralized</span> information pooling. <strong>Potentially
+              actionable.</strong></p>
+        </div>
+
+        <div class="highlight-box red-box mt-2">
+          The PCE boundary is a <span class="red bold">principled bright line</span>: outcomes inside PCE can arise from
+          decentralized algorithms alone; outcomes outside require an identifiable communication channel
+        </div>
+      </section>
+
+
+
+      <!-- ============================================================
+     SECTION DIVIDER: APPLICATIONS
+     ============================================================ -->
+      <section class="section-slide">
+        <h2>Applications</h2>
+      </section>
+
+
+
+      
+
+      <!-- Application 3: Collapse implication -->
+      <section>
+        <h2>Common-Demand Bertrand: Main Implication</h2>
+
+        <div class="theorem-block">
+          <p class="theorem-title">Implication</p>
+          <p>Every belief-invariant Bayesian solution is outcome-equivalent to the unique BNE:</p>
+          <p>$$p_i=\beta_i(t_i)\quad\text{a.s.}$$</p>
+        </div>
+
+        <ul class="mt-2">
+          <li><span class="red bold">Action correlation is not enough:</span> without posterior shifts, recommendations cannot move prices away from BNE</li>
+          <li><span class="red bold">Vives-style price effects require communication:</span> payoff-relevant information must be transmitted</li>
+          <li>Interpretation for your hierarchy: those effects belong to $\text{BCE}\setminus\text{PCE}$, not to decentralized BIBS/PCE learning</li>
+        </ul>
+      </section>
+
+
+      <!-- ============================================================
+     BACKUP / EXTRA SLIDES (for potential later use)
+     ============================================================ -->
+
+      <!-- BIBS and Forges -->
+      <section>
+        <h2>Connection to Forges' Five Concepts</h2>
+
+        <p>Forges (1993, 2006) introduced <strong>five notions</strong> of correlated equilibrium for Bayesian games,
+          depending on the information structure:</p>
+
+        <div class="mt-1" style="font-size: 0.88em;">
+          <table>
+            <tr>
+              <th>Concept</th>
+              <th>Information structure</th>
+              <th>Relation to PCE</th>
+            </tr>
+            <tr>
+              <td>Communication Eq.</td>
+              <td>Arbitrary mediator, full type reports</td>
+              <td>$\supseteq$ PCE</td>
+            </tr>
+            <tr>
+              <td>BCE</td>
+              <td>Arbitrary information structure</td>
+              <td>$\supseteq$ PCE</td>
+            </tr>
+            <tr>
+              <td class="red bold">BIBS</td>
+              <td class="red">Belief-invariant schemes</td>
+              <td class="red bold">= PCE</td>
+            </tr>
+            <tr>
+              <td>Agent-normal CE</td>
+              <td>Orthogonal devices only</td>
+              <td>$\subseteq$ PCE</td>
+            </tr>
+            <tr>
+              <td>Strategic-form CE</td>
+              <td>Correlated strategies, no types</td>
+              <td>$\subseteq$ PCE</td>
+            </tr>
+          </table>
+        </div>
+
+        <p class="mt-2"><span class="red bold">PCE = BIBS</span> (Belief-Invariant Bayesian Solution)</p>
+        <p class="small mt-1">The Privacy condition in PCE is exactly Forges' belief-invariance condition. Our
+          learning-theoretic foundation provides a new justification for BIBS as the natural solution concept for
+          decentralized play.</p>
+      </section>
+
+
+      <!-- BIBS strict inclusions -->
+      <section>
+        <h2>PCE in the Hierarchy</h2>
+
+        <p>All inclusions can be <strong>strict</strong>:</p>
+
+        <ul>
+          <li class="mt-1"><strong>Strategic-form CE $\subsetneq$ PCE</strong>: there exist PCE that cannot be induced
+            by orthogonal (type-independent) information structures</li>
+          <li class="mt-1"><strong>PCE $\subsetneq$ BCE</strong>: the mediation gap is generically non-empty whenever
+            there is meaningful private information</li>
+        </ul>
+
+        <div class="highlight-box red-box mt-2">
+          <p><strong>Economic implication:</strong></p>
+          <p class="mt-1">Shared histories give algorithms <em>more</em> power than simple public randomization
+            (strategic-form CE), but <em>less</em> power than a mediator who pools private info (BCE)</p>
+        </div>
+
+        <p class="mt-2 gray small">When no private information: Privacy is vacuous and PCE = BCE</p>
+      </section>
+
+      <!-- ============================================================
+     SECTION DIVIDER: TAKEAWAYS
+     ============================================================ -->
+      <section class="section-slide">
+        <h2>Takeaways</h2>
+      </section>
+
+
+      <!-- Summary -->
+      <section>
+        <h2>Summary</h2>
+
+        <div>
+          <p><span class="red bold">1.</span>&ensp; PCE is the <span class="red bold">tight</span> learning-theoretic
+            benchmark for
+            Bayesian games <br>
+            <span style="font-size:0.82em; color:grey"> &rarr; Analog of correlated equilibrium for incomplete
+              information <br>
+              &rarr; Convergence + Reachability ⇒ exact characterization</span>
+          </p>
+        </div>
+
+        <div class="mt-2">
+          <p><span class="red bold">2.</span>&ensp; Epistemic foundation via <span class="red bold">BIBS</span> <br>
+            <span style="font-size:0.82em; color:grey"> &rarr; PCE = BNE under belief-invariant mediation <br>
+              &rarr; Connects to Forges' hierarchy of solution concepts</span>
+          </p>
+        </div>
+
+        <div class="mt-2">
+          <p><span class="red bold">3.</span>&ensp; The <span class="red bold">mediation gap</span> separates
+            coordination from
+            collusion <br>
+            <span style="font-size:0.82em; color:grey"> &rarr; Outcomes in PCE: decentralized learning alone <br>
+              &rarr; Outcomes in BCE $\setminus$ PCE: require communication / info sharing <br>
+              &rarr; Policy-relevant distinction for antitrust enforcement</span>
+          </p>
+        </div>
+      </section>
+
+
+      <!-- Thank you -->
+      <section class="title-slide" data-background-color="#ffffff">
+        <h1 style="font-size: 2.8em;">Thank you!</h1>
+        <div class="title-rule"></div>
+        <div class="mt-2" style="font-size: 0.85em; color: var(--gray);">
+          <p>Martino Banchio &ensp;·&ensp; Lea Nagel &ensp;·&ensp; Roberto Saitto</p>
+        </div>
+      </section>
+
+
+    </div><!-- /.slides -->
+  </div><!-- /.reveal -->
+
+  <!-- Auto-wrap slide content for vertical centering -->
+  <script>
+    document.querySelectorAll('.reveal .slides > section').forEach(section => {
+      // Skip title slides, section divider slides
+      if (section.classList.contains('title-slide') || section.classList.contains('section-slide')) return;
+
+      const h2 = section.querySelector(':scope > h2');
+      if (!h2) return;
+
+      // Collect all siblings after h2
+      const wrapper = document.createElement('div');
+      wrapper.className = 'slide-body';
+
+      let sibling = h2.nextSibling;
+      while (sibling) {
+        const next = sibling.nextSibling;
+        wrapper.appendChild(sibling);
+        sibling = next;
+      }
+      section.appendChild(wrapper);
+    });
+  </script>
+
+  <!-- Reveal.js -->
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+  <script>
+    Reveal.initialize({
+      pdfMaxPagesPerSlide: 1,
+      pdfSeparateFragments: false,
+      width: 1280,
+      height: 720,
+      margin: 0.04,
+      hash: true,
+      slideNumber: true,
+      transition: 'none',
+      transitionSpeed: 'fast',
+      center: false,
+      controls: false,
+      controlsLayout: 'bottom-right',
+      progress: true,
+      pdfSeparateFragments: false,
+    });
+
+    // Re-typeset MathJax after slide change
+    Reveal.on('slidechanged', () => {
+      if (window.MathJax && MathJax.typeset) {
+        MathJax.typeset();
+      }
+    });
+    // Also typeset on ready
+    Reveal.on('ready', () => {
+      if (window.MathJax && MathJax.typeset) {
+        setTimeout(() => MathJax.typeset(), 500);
+      }
+    });
+  </script>
+
+</body>
+
+</html>
